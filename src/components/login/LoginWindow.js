@@ -1,11 +1,23 @@
 import React from 'react'
+import jQuery from 'jquery'
 import { Form, Input, Button, Checkbox, Tooltip, Icon } from 'antd'
 const FormItem = Form.Item
 
 let LoginWindow = React.createClass({
+  getInitialState() {
+    return {
+      iconLoading: false
+    }
+  },
   handleSubmit (e) {
     e.preventDefault()
-    console.log(this.props.form.getFieldsValue())
+    this.setState({ iconLoading: true })
+    jQuery.post('http://localhost:3001/login', {
+      username: this.props.form.getFieldsValue().username,
+      password: this.props.form.getFieldsValue().password
+    }, function (result) {
+      console.log(result)
+    })
   },
   render () {
     const { getFieldProps } = this.props.form
@@ -27,7 +39,8 @@ let LoginWindow = React.createClass({
           <Checkbox {...getFieldProps('agree', { initialValue: false, valuePropName: 'checked' })}></Checkbox>
         </FormItem>
         <FormItem wrapperCol={{ span: 16, offset: 6 }} style={{ marginTop: 24 }}>
-          <Button type="primary" htmlType="submit">登录</Button>
+          <Button type="primary" htmlType="submit" icon="poweroff" 
+            loading={this.state.iconLoading}>登录</Button>
         </FormItem>
       </Form>
     )
