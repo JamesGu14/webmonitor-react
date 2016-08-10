@@ -38,10 +38,6 @@ module.exports = {
     ]
   },
   clearBeforeBuild: true,
-  plugins: [
-    new webpack.NoErrorsPlugin(),
-    new webpack.HotModuleReplacementPlugin()
-  ],
   babel: {
     plugins: [['antd', options]]
   }
