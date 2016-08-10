@@ -1,22 +1,30 @@
 import React from 'react'
 import jQuery from 'jquery'
-import { Form, Input, Button, Checkbox, Tooltip, Icon } from 'antd'
+import { Form, Input, Button, Checkbox, Tooltip, Icon, Alert } from 'antd'
 const FormItem = Form.Item
 
 let LoginWindow = React.createClass({
   getInitialState() {
     return {
-      iconLoading: false
+      iconLoading: false,
+      isLoginFailed: false
     }
   },
   handleSubmit (e) {
+    var _this = this
     e.preventDefault()
     this.setState({ iconLoading: true })
     jQuery.post('http://localhost:3001/login', {
       username: this.props.form.getFieldsValue().username,
       password: this.props.form.getFieldsValue().password
     }, function (result) {
-      console.log(result)
+      if (!result.success) {
+        _this.setState({ iconLoading: false, isLoginFailed: true })
+      } else {
+        localStorage.setItem('token', result.token)
+        localStorage.setItem('profile', JSON.stringify(result.profile))
+        location.href= '/'
+      }
     })
   },
   render () {
@@ -41,6 +49,10 @@ let LoginWindow = React.createClass({
         <FormItem wrapperCol={{ span: 16, offset: 6 }} style={{ marginTop: 24 }}>
           <Button type="primary" htmlType="submit" icon="poweroff" 
             loading={this.state.iconLoading}>登录</Button>
+            <br /><br />
+            { this.state.isLoginFailed ? 
+              <Alert message="对不起，登录失败" type="warning" showIcon /> : null
+            }
         </FormItem>
       </Form>
     )
