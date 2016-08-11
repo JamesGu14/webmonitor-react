@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Menu, Icon, Breadcrumb } from 'antd'
+import { Menu, Icon, Breadcrumb, Modal } from 'antd'
 const SubMenu = Menu.SubMenu
 import jQuery from 'jquery'
 import Config from '../../config/'
 import MenuTag from '../components/menu/MenuTag'
 import { Router, Route, browserHistory, IndexRoute, Link, IndexLink } from 'react-router'
+const confirm = Modal.confirm
 import NavLink from '../components/menu/NavLink'
 
 import Dashboard from './index/Dashboard'
@@ -16,12 +17,25 @@ import Settings from './index/Settings'
 import ApplyForm from './index/ApplyForm'
 import UserApp from './index/UserApp'
 
+
 const serviceUrl = Config.get('/service')
+
+function signOut() {
+  confirm({
+    title: '您是否确认要退出登录？',
+    onOk() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('profile')
+      location.href = '/login.html'
+    },
+    onCancel() {}
+  })
+}
 
 let App = React.createClass({
   getInitialState() {
     if (!localStorage.getItem('token') || !localStorage.getItem('profile')) {
-      location.href='/login'
+      location.href='/login.html'
     }
     // Get registered website
     const profile = JSON.parse(localStorage.getItem('profile'))
@@ -45,7 +59,7 @@ let App = React.createClass({
 
         // TODO use AntD modal
         alert('对不起，请重新登录')
-        location.href = '/login'
+        location.href = '/login.html'
       }
     })
   },
@@ -84,6 +98,9 @@ let App = React.createClass({
             <MenuTag text="帮助中心" />
             <Menu.Item key="contact"><NavLink to="/contact"><Icon type="mail" />联系我们</NavLink></Menu.Item>
             <Menu.Item key="about"><NavLink to="/about"><Icon type="team" />关于我们</NavLink></Menu.Item>
+
+            <MenuTag text="登出" />
+            <Menu.Item key="signout"><a href="#" onClick={signOut}><Icon type="logout" />退出登录</a></Menu.Item>
           </Menu>
         </aside>
         <div className="ant-layout-main">
