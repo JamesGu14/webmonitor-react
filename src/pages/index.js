@@ -5,6 +5,17 @@ const SubMenu = Menu.SubMenu
 import jQuery from 'jquery'
 import Config from '../../config/'
 import MenuTag from '../components/menu/MenuTag'
+import { Router, Route, browserHistory, IndexRoute, Link, IndexLink } from 'react-router'
+import NavLink from '../components/menu/NavLink'
+
+import Dashboard from './index/Dashboard'
+import About from './index/About'
+import Contact from './index/Contact'
+import NoMatch from './index/NoMatch'
+import Settings from './index/Settings'
+import ApplyForm from './index/ApplyForm'
+import UserApp from './index/UserApp'
+
 const serviceUrl = Config.get('/service')
 
 let App = React.createClass({
@@ -29,7 +40,6 @@ let App = React.createClass({
       },
       success: function (data) {
         _this.setState({ userApps: _this.state.userApps.concat(data) })
-        console.log(_this.state.userApps)
       },
       error: function (err) {
 
@@ -56,22 +66,24 @@ let App = React.createClass({
             defaultSelectedKeys={['dashboard']} defaultOpenKeys={['dashboard']}>
 
             <MenuTag text="我的管家" />
-            <Menu.Item key="dashboard"><a href="#"><Icon type="home" />首页</a></Menu.Item>
+            <Menu.Item key="dashboard">
+              <IndexLink to="/" activeClassName="active"><Icon type="home" />首页</IndexLink>
+            </Menu.Item>
             <SubMenu key="sub1" title={<span><Icon type="desktop" />我的网站</span>}>
               {this.state.userApps.map(function (row, i) {
                 return (
-                  <Menu.Item key={i}><a href="#">{row.app_name}</a></Menu.Item>      
+                  <Menu.Item key={i}><NavLink to={'/app/' + row._id}>{row.app_name}</NavLink></Menu.Item>      
                 )
               })}
             </SubMenu>
-            <Menu.Item><a href="#"><Icon type="area-chart" />申请检测新网站</a></Menu.Item>
+            <Menu.Item><NavLink to="/apply"><Icon type="area-chart" />申请检测新网站</NavLink></Menu.Item>
 
             <MenuTag text="用户中心" />
-            <Menu.Item key="user"><a href="#"><Icon type="user" />用户中心</a></Menu.Item>
+            <Menu.Item key="user"><NavLink to="/settings"><Icon type="user" />账号设置</NavLink></Menu.Item>
 
             <MenuTag text="帮助中心" />
-            <Menu.Item key="contact"><a href="#"><Icon type="mail" />联系我们</a></Menu.Item>
-            <Menu.Item key="about"><a href="#"><Icon type="team" />关于我们</a></Menu.Item>
+            <Menu.Item key="contact"><NavLink to="/contact"><Icon type="mail" />联系我们</NavLink></Menu.Item>
+            <Menu.Item key="about"><NavLink to="/about"><Icon type="team" />关于我们</NavLink></Menu.Item>
           </Menu>
         </aside>
         <div className="ant-layout-main">
@@ -81,7 +93,7 @@ let App = React.createClass({
           <div className="ant-layout-container">
             <div className="ant-layout-content">
               <div style={{ minHeight: '400px' }}>
-                {this.state.username}
+                {this.props.children || <Dashboard />}
               </div>
             </div>
           </div>
@@ -94,7 +106,19 @@ let App = React.createClass({
   }
 })
 
-render(
-  <App />,
-  document.getElementById('app')
-)
+render((
+  <Router history={browserHistory}>
+    <Route path="/" component={App}>
+      
+      <IndexRoute component={Dashboard} />
+
+      <Route path="/app/:appid" component={UserApp}></Route>
+      <Route path="/about" component={About}></Route>
+      <Route path="/contact" component={Contact}></Route>
+      <Route path="/settings" component={Settings}></Route>
+      <Route path="/apply" component={ApplyForm}></Route>
+      <Route path="*" component={NoMatch}/>
+    </Route>
+   
+  </Router> 
+), document.getElementById('app'))
