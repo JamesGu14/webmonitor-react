@@ -23,6 +23,7 @@
   "homepage": "https://github.com/JamesGu14/webmonitor-react",
   "dependencies": {
     "antd": "^1.8.0",
+    "confidence": "^3.0.1",
     "cookie": "^0.3.1",
     "css-loader": "^0.23.1",
     "express": "^4.14.0",

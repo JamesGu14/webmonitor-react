@@ -1,5 +1,7 @@
 import React from 'react'
 import jQuery from 'jquery'
+import Config from '../../../config/'
+const serviceUrl = Config.get('/service')
 import { Form, Input, Button, Checkbox, Tooltip, Icon, Alert } from 'antd'
 const FormItem = Form.Item
 
@@ -14,7 +16,7 @@ let LoginWindow = React.createClass({
     var _this = this
     e.preventDefault()
     this.setState({ iconLoading: true })
-    jQuery.post('http://localhost:3001/login', {
+    jQuery.post(serviceUrl + '/login', {
       username: this.props.form.getFieldsValue().username,
       password: this.props.form.getFieldsValue().password
     }, function (result) {
