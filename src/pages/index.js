@@ -48,9 +48,13 @@ let App = React.createClass({
   componentDidMount() {
     var _this = this
     Ajax.get(`${serviceUrl}/app`, function (err, data) {
-      if (!err) {
-        alert('对不起，请重新登录')
-        location.href = '/login.html'
+      if (err) {
+        confirm({
+          content: '对不起，您的登录已过期，请重新登录',
+          onOk() {
+            location.href = '/login.html'    
+          }
+        })
       } 
 
       _this.setState({ userApps: _this.state.userApps.concat(data) })

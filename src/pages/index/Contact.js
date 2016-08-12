@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import jQuery from 'jquery'
-import { Row, Col, Card, Form, Checkbox, Input, Button } from 'antd'
+import Ajax from '../../method/Ajax'
+import { Row, Col, Card, Form, Checkbox, Input, Button, Modal } from 'antd'
+const confirm = Modal.confirm
 const CheckboxGroup = Checkbox.Group
 const FormItem = Form.Item
-
 
 const reasons = [
   { label: '鼓励一下', value: 'encourage' },
@@ -29,8 +29,18 @@ let Contact = React.createClass({
     this.setState({ mobile: event.target.value })
   },
   formSubmit() {
-    
-  }
+    Ajax.post(`${serviceUrl}/contact`, this.state, function (err, data) {
+      debugger
+      if (err) {
+        confirm({
+          content: '对不起，您的登录已过期，请重新登录',
+          onOk() {
+            location.href = '/login.html'    
+          }
+        })
+      }
+    })
+  },
   render() {
     return (
       <Row type="flex" justify="center">
@@ -40,7 +50,7 @@ let Contact = React.createClass({
             <p>感谢您提供的任何宝贵的意见和建议，您的支持是我们持续升级系统的动力</p>
             <br /><br />
 
-            <Form horizontal>
+            <Form horizontal onSubmit={this.formSubmit}>
               <FormItem
                 label="联系原因 "
                 labelCol={{ span: 6 }}

@@ -18,8 +18,21 @@ Ajax.get = (url, done) => {
   })
 }
 
-Ajax.post = () => {
-
+Ajax.post = (url, payload, done) => {
+  jQuery.ajax({
+    type: 'POST',
+    url: url,
+    data: payload,
+    headers: {
+      Authorization: window.localStorage.getItem('token')
+    },
+    success: function (data) {
+      done(null, data)
+    },
+    error: function (err) {
+      done(err)
+    }
+  })
 }
 
 Ajax.put = () => {
