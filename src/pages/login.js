@@ -17,7 +17,7 @@ class App extends Component {
                   <path d="M 4 4 L 44 4 L 44 44 Z" fill="#a88add"></path>
                   <path d="M 4 4 L 34 4 L 24 24 Z" fill="rgba(0,0,0,0.15)"></path>
                   <path d="M 4 4 L 24 4 L 4  44 Z" fill="#0cc2aa"></path>
-                </svg> <span style={{ position: 'relative', bottom: '5px' }}>WEB MONITOR</span>
+                </svg> <span style={{ position: 'relative', bottom: '5px' }}> 网 站 管 家</span>
               </h2>
               <br /><br />
               <LoginWindow />

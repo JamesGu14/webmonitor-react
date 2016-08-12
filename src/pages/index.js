@@ -8,6 +8,7 @@ import MenuTag from '../components/menu/MenuTag'
 import { Router, Route, browserHistory, IndexRoute, Link, IndexLink } from 'react-router'
 const confirm = Modal.confirm
 import NavLink from '../components/menu/NavLink'
+import Ajax from '../method/Ajax'
 
 import Dashboard from './index/Dashboard'
 import About from './index/About'
@@ -46,21 +47,13 @@ let App = React.createClass({
   },
   componentDidMount() {
     var _this = this
-    jQuery.ajax({
-      type: 'GET',
-      url: `${serviceUrl}/app`,
-      headers: {
-        Authorization: window.localStorage.getItem('token')
-      },
-      success: function (data) {
-        _this.setState({ userApps: _this.state.userApps.concat(data) })
-      },
-      error: function (err) {
-
-        // TODO use AntD modal
+    Ajax.get(`${serviceUrl}/app`, function (err, data) {
+      if (!err) {
         alert('对不起，请重新登录')
         location.href = '/login.html'
-      }
+      } 
+
+      _this.setState({ userApps: _this.state.userApps.concat(data) })
     })
   },
   render() {
@@ -109,13 +102,13 @@ let App = React.createClass({
           </div>
           <div className="ant-layout-container">
             <div className="ant-layout-content">
-              <div style={{ minHeight: '400px' }}>
+              <div style={{ minHeight: '70vh' }}>
                 {this.props.children || <Dashboard />}
               </div>
             </div>
           </div>
           <div className="ant-layout-footer">
-          Powered By James Gu © 2015 
+            Powered By James Gu © 2016 
           </div>
         </div>
       </div>

@@ -127,7 +127,7 @@
 	                _react2.default.createElement(
 	                  'span',
 	                  { style: { position: 'relative', bottom: '5px' } },
-	                  'WEB MONITOR'
+	                  ' 网 站 管 家'
 	                )
 	              ),
 	              _react2.default.createElement('br', null),
